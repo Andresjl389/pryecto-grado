@@ -1,0 +1,22 @@
+steps:
+  # Paso 1: Instalar las dependencias
+  - name: 'gcr.io/cloud-builders/python'
+    args: ['-m', 'pip', 'install', '--no-cache-dir', '-r', 'requirements.txt']
+
+  # Paso 2: Ejecutar las migraciones de Alembic
+  - name: 'gcr.io/cloud-builders/python'
+    args: ['-m', 'alembic', 'upgrade', 'head']
+
+  # Paso 3: Desplegar la aplicación
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'proyecto-grado-backennd'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
