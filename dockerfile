@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /app
+WORKDIR ./
 
 # Copia los archivos de tu proyecto
 COPY . .
