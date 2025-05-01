@@ -1,10 +1,11 @@
 from uuid import UUID
-from google import genai
+import google.generativeai as genai
 from sqlalchemy.orm import Session
 from repositories.kitchen_config import get_by
 from repositories.kitchen_type import get_type_by_id
 
-client = genai.Client(api_key="AIzaSyDJZ6xQdUuxyF_uvqKiJfZV0lgXC6xofdQ")
+# Configura tu clave API una vez
+genai.configure(api_key="AIzaSyDJZ6xQdUuxyF_uvqKiJfZV0lgXC6xofdQ")
 
 
 def send_message_to_ai(user_id: UUID, config_id: UUID, db: Session):
@@ -15,7 +16,7 @@ def send_message_to_ai(user_id: UUID, config_id: UUID, db: Session):
     kitchen_type = get_type_by_id(db, kitchen_config.kitchen_type_id)
     if not kitchen_type:
         raise Exception("Kitchen type not found")
-    
+
     prompt = (
         f"Quiero que actúes como un diseñador experto en organización de cocinas de restaurantes.\n"
         f"Esta es la información de la cocina:\n\n"
@@ -28,15 +29,10 @@ def send_message_to_ai(user_id: UUID, config_id: UUID, db: Session):
         f"ubicación de estaciones, optimización de flujos de trabajo y sugerencias para mejorar la eficiencia."
     )
 
+    # Crear instancia del modelo
+    model = genai.GenerativeModel("gemini-1.5-flash")
 
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt,
-    )
+    # Generar contenido
+    response = model.generate_content(prompt)
+
     return response.text
-    
-
-    
-    
-    # return {'config': kitchen_config, 'type':kitchen_type}
-

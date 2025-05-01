@@ -16,3 +16,7 @@ EXPOSE 8080
 
 # Comando para ejecutar la aplicación FastAPI con Uvicorn
 CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]
+
+
+# Reemplaza CMD con:
+CMD ["bash", "start.sh"]
