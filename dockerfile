@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.13-slim
 
 # Instala bash y curl usando APT (no APK)
 RUN apt-get update && apt-get install -y bash curl && rm -rf /var/lib/apt/lists/*
